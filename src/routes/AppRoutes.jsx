@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Routes,
@@ -5,41 +6,63 @@ import {
   Navigate
 } from "react-router-dom";
 
+// Layouts
 import MainLayout from "../components/layout/MainLayout";
 import DashboardLayout from "../components/layout/DashboardLayout";
 
+// Route protection
 import ProtectedRoute from "./ProtectedRoute";
 import RoutePlaceholder from "./RoutePlaceholder";
 
+// Authentication pages
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 
+// Customer pages
+import Home from "../pages/customer/Home";
+import BrowseProperties from "../pages/customer/BrowseProperties";
+import PropertyDetails from "../pages/customer/PropertyDetails";
+import BookingForm from "../pages/customer/BookingForm";
+import MyBookings from "../pages/customer/MyBookings";
+import BookingDetails from "../pages/customer/BookingDetails";
+
+// Admin pages
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import Managers from "../pages/admin/Managers";
 import Properties from "../pages/admin/Properties";
 import Bookings from "../pages/admin/Bookings";
 
+// Manager pages
+import ManagerDashboard from "../pages/manager/ManagerDashboard";
+import MyProperties from "../pages/manager/MyProperties";
+import AddProperty from "../pages/manager/AddProperty";
+import EditProperty from "../pages/manager/EditProperty";
+import ManageRooms from "../pages/manager/ManageRooms";
+import EditRoom from "../pages/manager/EditRoom";
+import ManagerBookings from "../pages/manager/ManagerBookings";
+
 function AppRoutes() {
   return (
     <Routes>
-      {/* ---------------------------------- */}
+
+      {/* ================================== */}
       {/* PUBLIC ROUTES */}
-      {/* ---------------------------------- */}
+      {/* ================================== */}
 
       <Route element={<MainLayout />}>
         <Route
           path="/"
-          element={<RoutePlaceholder title="StayEase Home" />}
+          element={<Home />}
         />
 
         <Route
           path="/properties"
-          element={<RoutePlaceholder title="Browse Properties" />}
+          element={<BrowseProperties />}
         />
 
         <Route
           path="/properties/:propertyId"
-          element={<RoutePlaceholder title="Property Details" />}
+          element={<PropertyDetails />}
         />
 
         <Route
@@ -72,166 +95,146 @@ function AppRoutes() {
             <RoutePlaceholder title="Access Denied" />
           }
         />
-      </Route>
-
-      {/* ---------------------------------- */}
-      {/* CUSTOMER ROUTES */}
-      {/* ---------------------------------- */}
-
-      <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
-        <Route path="/customer" element={<DashboardLayout />}>
-          <Route
-            path="dashboard"
-            element={
-              <RoutePlaceholder title="Customer Dashboard" />
-            }
-          />
-
-          <Route
-            path="bookings"
-            element={
-              <RoutePlaceholder title="My Bookings" />
-            }
-          />
-
-          <Route
-            path="bookings/:bookingId"
-            element={
-              <RoutePlaceholder title="Booking Details" />
-            }
-          />
-        </Route>
 
         <Route
-          path="/properties/:propertyId/book"
-          element={
-            <MainLayout />
-          }
-        >
-          <Route
-            index
-            element={
-              <RoutePlaceholder title="Create Booking" />
-            }
-          />
-        </Route>
-      </Route>
-
-      {/* ---------------------------------- */}
-      {/* MANAGER ROUTES */}
-      {/* ---------------------------------- */}
-
-      <Route element={<ProtectedRoute allowedRoles={["manager"]} />}>
-        <Route path="/manager" element={<DashboardLayout />}>
-          <Route
-            path="dashboard"
-            element={
-              <RoutePlaceholder title="Manager Dashboard" />
-            }
-          />
-
-          <Route
-            path="properties"
-            element={
-              <RoutePlaceholder title="My Properties" />
-            }
-          />
-
-          <Route
-            path="properties/new"
-            element={
-              <RoutePlaceholder title="Add Property" />
-            }
-          />
-
-          <Route
-            path="properties/:propertyId/edit"
-            element={
-              <RoutePlaceholder title="Edit Property" />
-            }
-          />
-
-          <Route
-            path="properties/:propertyId/rooms"
-            element={
-              <RoutePlaceholder title="Manage Rooms" />
-            }
-          />
-
-          <Route
-            path="properties/:propertyId/rooms/:roomId/edit"
-            element={
-              <RoutePlaceholder title="Edit Room" />
-            }
-          />
-
-          <Route
-            path="bookings"
-            element={
-              <RoutePlaceholder title="Manager Bookings" />
-            }
-          />
-        </Route>
-      </Route>
-
-      {/* ---------------------------------- */}
-      {/* ADMIN ROUTES */}
-      {/* ---------------------------------- */}
-
-      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-        <Route path="/admin" element={<DashboardLayout />}>
-          <Route
-            path="dashboard"
-            element={
-              <RoutePlaceholder title="Admin Dashboard" />
-            }
-          />
-
-          <Route
-            path="managers"
-            element={
-              <RoutePlaceholder title="Manage Managers" />
-            }
-          />
-
-          <Route
-            path="properties"
-            element={
-              <RoutePlaceholder title="Manage Properties" />
-            }
-          />
-
-          <Route
-            path="bookings"
-            element={
-              <RoutePlaceholder title="Manage Bookings" />
-            }
-          />
-        </Route>
-      </Route>
-
-      {/* ---------------------------------- */}
-      {/* FALLBACK */}
-      {/* ---------------------------------- */}
-
-      <Route
-        path="/404"
-        element={
-          <MainLayout />
-        }
-      >
-        <Route
-          index
+          path="/404"
           element={
             <RoutePlaceholder title="Page Not Found" />
           }
         />
+
+        {/* Customer booking form */}
+        <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
+          <Route
+            path="/properties/:propertyId/book"
+            element={<BookingForm />}
+          />
+        </Route>
       </Route>
+
+
+      {/* ================================== */}
+      {/* CUSTOMER DASHBOARD ROUTES */}
+      {/* ================================== */}
+
+      <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
+        <Route path="/customer" element={<DashboardLayout />}>
+
+          <Route
+            index
+            element={<Navigate to="bookings" replace />}
+          />
+
+          <Route
+            path="bookings"
+            element={<MyBookings />}
+          />
+
+          <Route
+            path="bookings/:bookingId"
+            element={<BookingDetails />}
+          />
+
+        </Route>
+      </Route>
+
+
+      {/* ================================== */}
+      {/* MANAGER ROUTES */}
+      {/* ================================== */}
+
+      <Route element={<ProtectedRoute allowedRoles={["manager"]} />}>
+        <Route path="/manager" element={<DashboardLayout />}>
+
+          <Route
+            index
+            element={<ManagerDashboard />}
+          />
+
+          <Route
+            path="dashboard"
+            element={<ManagerDashboard />}
+          />
+
+          <Route
+            path="properties"
+            element={<MyProperties />}
+          />
+
+          <Route
+            path="properties/add"
+            element={<AddProperty />}
+          />
+
+          <Route
+            path="properties/:propertyId/edit"
+            element={<EditProperty />}
+          />
+
+          <Route
+            path="properties/:propertyId/rooms"
+            element={<ManageRooms />}
+          />
+
+          <Route
+            path="properties/:propertyId/rooms/:roomId/edit"
+            element={<EditRoom />}
+          />
+
+          <Route
+            path="bookings"
+            element={<ManagerBookings />}
+          />
+
+        </Route>
+      </Route>
+
+
+      {/* ================================== */}
+      {/* ADMIN ROUTES */}
+      {/* ================================== */}
+
+      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+        <Route path="/admin" element={<DashboardLayout />}>
+
+          <Route
+            index
+            element={<AdminDashboard />}
+          />
+
+          <Route
+            path="dashboard"
+            element={<AdminDashboard />}
+          />
+
+          <Route
+            path="managers"
+            element={<Managers />}
+          />
+
+          <Route
+            path="properties"
+            element={<Properties />}
+          />
+
+          <Route
+            path="bookings"
+            element={<Bookings />}
+          />
+
+        </Route>
+      </Route>
+
+
+      {/* ================================== */}
+      {/* FALLBACK */}
+      {/* ================================== */}
 
       <Route
         path="*"
         element={<Navigate to="/404" replace />}
       />
+
     </Routes>
   );
 }

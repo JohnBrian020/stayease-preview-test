@@ -1,11 +1,18 @@
+
 import React from "react";
+
 import AppRoutes from "./routes/AppRoutes";
+
+import { AuthProvider } from "./context/AuthContext";
+import { BookingProvider } from "./context/BookingContext";
 
 function App() {
   return (
-    <div className="stayease-app">
-      <AppRoutes />
-    </div>
+    <AuthProvider>
+      <BookingProvider>
+        <AppRoutes />
+      </BookingProvider>
+    </AuthProvider>
   );
 }
 
