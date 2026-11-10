@@ -1,10 +1,24 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './styles/global.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import App from "./App";
+
+import { AuthProvider } from "./context/AuthContext";
+import { BookingProvider } from "./context/BookingContext";
+
+import "./styles/global.css";
+
+ReactDOM.createRoot(
+  document.getElementById("root")
+).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+    <BrowserRouter>
+      <AuthProvider>
+        <BookingProvider>
+          <App />
+        </BookingProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </React.StrictMode>
+);
